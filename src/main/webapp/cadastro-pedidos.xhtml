@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Cadastrar Pedidos</title>
+</h:head>
+
+
+<h:body class="ui-fluid">
+ 
+    <h1><p:outputLabel id="titulo" value="Cadastro de pedidos" /> </h1>
+    <p:panel id="panel2" header="Pedidos do Cliente #{param['id']} " >
+	<h:form id="formulario" >	
+	        <p:focus context="panel"/>
+			<p:commandButton id="btnovo" value="Novo Pedido" 
+			     style="margin-top:10px;margin-bottom:10px; width:200px;display:block"
+			     update="formulario" ajax="true" 
+			     action="#{clienteMB.novoPedido}" />
+					
+			<p:panelGrid id="dados" columns="2" 
+			     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4"
+			     layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+			    <p:outputLabel for="input-nome" value="Produto:" />
+			    
+			  
+			    
+				<p:inputText id="input-nome" label="Produto" value="#{clienteMB.atualizaPed.nomeProduto}"
+			        	required="true" maxlength="60" size="60"
+			        	requiredMessage="Nome: Campo obrigatório!" />
+			    
+			    <p:outputLabel for="input-end" value="Quantidade:" />
+				<p:inputText id="input-end" label="Quantidade" value="#{clienteMB.cliente.quantidade}"
+			       	size="60"	maxlength="100" required="true" />
+			       	
+			       	
+			       	<p:outputLabel for="input-valor" value="Valor Total:" />
+				<p:inputText id="input-valor" label="Quantidade" value="#{clienteMB.cliente.valorTotal}"
+			       	size="60"	maxlength="100" required="true" />
+			       	
+			</p:panelGrid>
+			
+			<p:commandButton id="salvar" value="Salvar"
+			     style="width:200px;display:block"
+			     update="listagem-cli formulario" ajax="true"
+				actionListener="#{clienteMB.salvar}" />
+
+			<p:messages />
+			
+			<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true" />		  
+	</h:form>
+
+		</p:panel>	
+		
+ 
+     <h2><p:outputLabel id="titulo-lista" value="Lista de Pedidos"/> </h2>
+     <p:panel id="panel" header="Total de pedidos: ">
+     <h:form id="listagem-cli">
+     <p:dataTable id="pedidosList" var="cli" value="#{clienteMB.cliente.pedidos}"  
+        rows="6" paginator="true"
+        tableStyle="table-layout: auto;"
+        reflow="true" >
+		 
+	    <p:column headerText="Nome do Produto">
+	        <h:outputText value="#{cli.nomeProduto}" />
+	    </p:column>
+ 		<p:column headerText="Quantidade">
+	        <h:outputText value="#{cli.quantidade}" />
+	    </p:column>
+	    
+	    <p:column headerText="Valor Total">
+	        <h:outputText value="#{cli.valorTotal}" />
+	    </p:column>
+	    	    
+	    <p:column headerText="Alt.">
+           <p:commandButton update="formulario" 
+                        value="Alterar" icon="fa-edit"
+                        actionListener="#{clienteMB.update(cli.id)}" 
+                        ajax="true" styleClass="ui-priority-primary">
+           </p:commandButton>
+		</p:column>
+		
+		<p:column headerText="Exc.">
+           <p:commandButton update="pedidosList formulario" 
+                        value="Excluir" icon="ui-icon-closethick"
+                        actionListener="#{clienteMB.delete(cli.id)}"
+                        ajax="true" styleClass="ui-priority-primary">
+              <p:confirm header="Confirmação" message="Confirma a exclusão?" icon="pi pi-exclamation-triangle" />
+           </p:commandButton>
+		</p:column>		        
+     </p:dataTable>
+     
+     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+        <p:commandButton value="Nao" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+     </p:confirmDialog>
+     
+    </h:form>
+    </p:panel>
+</h:body>
+</html>
